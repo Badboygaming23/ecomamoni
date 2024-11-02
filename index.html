@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoMamoni Investment</title>
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* General Styling */
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background: #4CAF50;
+            color: #fff;
+            padding: 1em;
+            text-align: center;
+        }
+
+        header nav a {
+            color: #fff;
+            margin: 0 15px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .hero {
+            background: #e8f5e9;
+            padding: 3em 1em;
+            text-align: center;
+        }
+
+        .hero h2 {
+            color: #4CAF50;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: #fff;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+
+        #investments, #withdrawals {
+            padding: 2em 1em;
+            text-align: center;
+        }
+
+        .investment-container, .withdrawal-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .investment-card, .withdrawal-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 1em;
+            width: 200px;
+            border-radius: 5px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .investment-card:hover, .withdrawal-card:hover {
+            transform: scale(1.05);
+        }
+
+        .investment-card img, .withdrawal-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+            cursor: pointer; /* Change cursor to pointer for images */
+        }
+
+        /* Modal Styling */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 2em;
+            border-radius: 5px;
+            max-width: 500px;
+            width: 90%;
+            text-align: left;
+            position: relative;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 20px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff4c4c;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            background: #ff0000;
+        }
+
+        form input, form textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        form button {
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background: #45a049;
+        }
+
+        /* Zoom Modal */
+        .zoom-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .zoom-modal img {
+            max-width: 90%;
+            max-height: 90%;
+        }
+		
+		 /* Loading Screen Styles */
+        #loadingScreen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; /* Ensure it's on top of everything */
+        }
+
+        #recyclingSpinner {
+            width: 100px; /* Set the size of the recycling symbol */
+            animation: spin 1s linear infinite; /* Spinning animation */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+
+    </style>
+</head>
+<body>
+	
+    <!-- Header Section -->
+    <header>
+        <h1>Invest on EcoMamoni</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="aboutus.html">About Us</a>
+            <a href="javascript:void(0)" onclick="openModal()">Contact Us</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <h2>Invest in a Greener Tomorrow with EcoMamoni</h2>
+        <p>At EcoMamoni, we’re dedicated to helping you grow your finances while contributing to a healthier planet.</p>
+        <p>By investing in EcoMamoni, a pioneering recycling company, you’ll not only support environmental sustainability but also enjoy a steady daily income. Watch your investment grow and meet your everyday needs with ease.</p>
+        <p>Join a community that’s committed to turning waste into wealth, empowering you to benefit financially from our eco-friendly innovations.</p>
+       <a href="javascript:void(0)" class="cta-button" id="registerButton">Register Now!</a>
+    </section>
+
+    <!-- Investment Options Section -->
+    <section id="investments">
+        <h2>Investment Options</h2>
+        <div class="investment-container">
+            <!-- Investment Card -->
+            <div class="investment-card">
+                <img src="p1.png" alt="400 Pesos Investment" onclick="openZoom(this.src)">
+                <h3>400 Pesos</h3>
+                <p>Earn 10 pesos daily</p>
+            </div>
+            <div class="investment-card">
+                <img src="p2.png" alt="1200 Pesos Investment" onclick="openZoom(this.src)">
+                <h3>1200 Pesos</h3>
+                <p>Earn 30 pesos daily</p>
+            </div>
+            <div class="investment-card">
+                <img src="p3.png" alt="3500 Pesos Investment" onclick="openZoom(this.src)">
+                <h3>3500 Pesos</h3>
+                <p>Earn 90 pesos daily</p>
+            </div>
+            <div class="investment-card">
+                <img src="p4.png" alt="8000 Pesos Investment" onclick="openZoom(this.src)">
+                <h3>8000 Pesos</h3>
+                <p>Earn 265 pesos daily</p>
+            </div>
+            <div class="investment-card">
+                <img src="p5.png" alt="26000 Pesos Investment" onclick="openZoom(this.src)">
+                <h3>26000 Pesos</h3>
+                <p>Earn 866 pesos daily</p>
+            </div>
+            <div class="investment-card">
+                <img src="p6.png" alt="71000 Pesos Investment" onclick="openZoom(this.src)">
+                <h3>71000 Pesos</h3>
+                <p>Earn 2369 pesos daily</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Proof of Withdrawal Section -->
+    <section id="withdrawals">
+        <h2>Proof of Withdrawal</h2>
+        <div class="withdrawal-container">
+            <div class="withdrawal-card">
+                <img src="invest1.png" alt="Withdrawal Proof 1" onclick="openZoom(this.src)">
+            </div>
+            <div class="withdrawal-card">
+                <img src="invest2.png" alt="Withdrawal Proof 2" onclick="openZoom(this.src)">
+            </div>
+            <div class="withdrawal-card">
+                <img src="invest3.png" alt="Withdrawal Proof 3" onclick="openZoom(this.src)">
+            </div>
+            <div class="withdrawal-card">
+                <img src="invest4.png" alt="Withdrawal Proof 4" onclick="openZoom(this.src)">
+            </div>
+            <div class="withdrawal-card">
+                <img src="invest5.png" alt="Withdrawal Proof 5" onclick="openZoom(this.src)">
+            </div>
+			            <div class="withdrawal-card">
+                <img src="invest6.png" alt="Withdrawal Proof 5" onclick="openZoom(this.src)">
+            </div>
+			            <div class="withdrawal-card">
+                <img src="invest7.png" alt="Withdrawal Proof 5" onclick="openZoom(this.src)">
+            </div>
+			            <div class="withdrawal-card">
+                <img src="invest8.png" alt="Withdrawal Proof 5" onclick="openZoom(this.src)">
+            </div>
+			            <div class="withdrawal-card">
+                <img src="invest9.png" alt="Withdrawal Proof 5" onclick="openZoom(this.src)">
+            </div>
+			            <div class="withdrawal-card">
+                <img src="invest10.png" alt="Withdrawal Proof 5" onclick="openZoom(this.src)">
+            </div>
+			            <div class="withdrawal-card">
+                <img src="invest11.png" alt="Withdrawal Proof 5" onclick="openZoom(this.src)">
+            </div>
+			            <div class="withdrawal-card">
+                <img src="invest12.png" alt="Withdrawal Proof 5" onclick="openZoom(this.src)">
+            </div>
+			            <div class="withdrawal-card">
+                <img src="invest13.png" alt="Withdrawal Proof 5" onclick="openZoom(this.src)">
+            </div>
+			            <div class="withdrawal-card">
+                <img src="invest14.png" alt="Withdrawal Proof 5" onclick="openZoom(this.src)">
+            </div>
+			            <div class="withdrawal-card">
+                <img src="invest15.png" alt="Withdrawal Proof 5" onclick="openZoom(this.src)">
+            </div>
+			            <div class="withdrawal-card">
+                <img src="invest16.png" alt="Withdrawal Proof 5" onclick="openZoom(this.src)">
+            </div>
+			            <div class="withdrawal-card">
+                <img src="invest17.png" alt="Withdrawal Proof 5" onclick="openZoom(this.src)">
+            </div>
+			            <div class="withdrawal-card">
+                <img src="invest18.png" alt="Withdrawal Proof 5" onclick="openZoom(this.src)">
+            </div>
+			            <div class="withdrawal-card">
+                <img src="invest19.png" alt="Withdrawal Proof 5" onclick="openZoom(this.src)">
+            </div>
+			            <div class="withdrawal-card">
+                <img src="invest20.png" alt="Withdrawal Proof 5" onclick="openZoom(this.src)">
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal for Contact Form -->
+    <div class="modal" id="contactModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            <h2>Contact Us</h2>
+            <form>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" required></textarea>
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Zoom Modal for Images -->
+    <div class="zoom-modal" id="zoomModal">
+        <img id="zoomedImage" src="" alt="Zoomed Image">
+        <button class="close-btn" onclick="closeZoom()">&times;</button>
+    </div>
+	
+	    <!-- Loading Screen -->
+    <div id="loadingScreen">
+        <img id="recyclingSpinner" src="recycle.png" alt="Loading...">
+    </div>
+
+    <script>
+        // Function to open zoom modal
+        function openZoom(src) {
+            document.getElementById("zoomedImage").src = src;
+            document.getElementById("zoomModal").style.display = "flex";
+        }
+
+        // Function to close zoom modal
+        function closeZoom() {
+            document.getElementById("zoomModal").style.display = "none";
+        }
+		// JavaScript to handle animation delay for each team member
+    const members = document.querySelectorAll('.team-member');
+    members.forEach((member, index) => {
+        member.style.animationDelay = `${0.2 * index}s`;
+    });
+
+    // JavaScript to handle modal open/close
+    function openModal() {
+        document.getElementById("contactModal").style.display = "flex";
+        displayInstructions();
+    }
+
+    function closeModal() {
+        document.getElementById("contactModal").style.display = "none";
+    }
+
+    // Function to display instructions in the modal
+    function displayInstructions() {
+        const modalContent = document.querySelector('.modal-content');
+        const instructions = document.createElement('p');
+        instructions.textContent = "If you have any concerns or need assistance on how to invest, please fill out the form below, and we will get back to you as soon as possible.";
+        instructions.style.marginBottom = '20px'; // Add some space below the instructions
+        modalContent.insertBefore(instructions, modalContent.firstChild);
+    }
+
+    // Close the modal if the user clicks outside of it
+    window.onclick = function(event) {
+        const modal = document.getElementById("contactModal");
+        if (event.target === modal) {
+            closeModal();
+        }
+    };
+	
+	   // Add event listener to the register button to show spinner
+        document.getElementById('registerButton').addEventListener('click', function() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            loadingScreen.style.display = 'flex'; // Show loading screen
+            setTimeout(function() {
+                window.location.href = 'https://ecomamoni.com/join?i=ty2uYK'; // Redirect to the link
+            }, 1000); // Redirect after 1 second
+        });
+
+    </script>
+</body>
+</html>
